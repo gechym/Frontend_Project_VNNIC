@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Đánh giá tín nhiệm tên miền</title>
+    <meta charset="UTF-8" />
+    <link
+      rel="shortcut icon"
+      href="https://tenmien.vn/themes/img/favicon.png"
+    />
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+      name="viewport"
+    />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" />
+
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://tenmien.vn/plugins/bootstrap/css/bootstrap.min.css?v=3"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://tenmien.vn/plugins/owlcarousel/assets/owl.carousel.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://tenmien.vn/plugins/owlcarousel/assets/owl.theme.default.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://tenmien.vn/themes/css/base-color.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://tenmien.vn/themes/css/subpage.css?t=3"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://tenmien.vn/themes/css/index.css?t=3"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://tenmien.vn/themes/css/domain-suggestion.css?t=4"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://tenmien.vn/themes/css/theme.css?t=2"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://tenmien.vn/themes/css/layout.css?t=3"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://tenmien.vn/plugins/bootstrap/js/bootstrap.min.js?v=3"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tenmien.vn/plugins/owlcarousel/owl.carousel.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://tenmien.vn/themes/js/main.js"
+    ></script>
+    <!-- ================= End JS ================== -->
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-23662219-12"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+
+      gtag("js", new Date());
+
+      gtag("config", "UA-23662219-12");
+    </script>
+    <!-- Head -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script type="module" src="/src/main.jsx"></script>
+  <script>
+      $(".menu-bar svg").click(function () {
+        $("#menu-mobile").addClass("open");
+      });
+
+      $(".menu-mb__item .dropdown-icon").click(function () {
+        $(this).parent().toggleClass("open");
+      });
+
+      $(".menu-mb__close svg").click(function () {
+        $("#menu-mobile").removeClass("open");
+      });
+
+      if (document.getElementById("myModal") != null) {
+        // Get the modal
+        var modal = document.getElementById("myModal");
+
+        var modal2 = document.getElementById("myModal2");
+
+        // Get the <span> element that closes the modal
+        var span = document.getElementsByClassName("close")[0];
+        var span1 = document.getElementsByClassName("close")[1];
+
+        // When the user clicks on <span> (x), close the modal
+        span.onclick = function () {
+          modal.style.display = "none";
+          modal2.style.display = "block";
+        };
+
+        span1.onclick = function () {
+          modal2.style.display = "none";
+        };
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+            modal2.style.display = "block";
+          }
+        };
+      }
+  </script>
+</html>

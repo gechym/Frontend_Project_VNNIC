@@ -1,0 +1,36 @@
+.modal-content {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.evaluation-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+.evaluation-table th,
+.evaluation-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.evaluation-table th {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.evaluation-table td {
+    background-color: #fafafa;
+}
+
+.evaluation-table tr:nth-child(even) td {
+    background-color: #f9f9f9;
+}
