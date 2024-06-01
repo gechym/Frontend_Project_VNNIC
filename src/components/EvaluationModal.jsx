@@ -5,8 +5,19 @@ import './styles/modal.css';
 import Suggestions from './SuggestionsDomain';
 
 const EvaluationModal = ({ visible, hide, data }) => {
+    const [size , setSize] = React.useState('auto')
+    React.useEffect(() => {
+        if(data.result === "Có tín nhiệm thấp"){
+            setSize('auto')
+        }
+
+        if(data.result === "Bình thường"){
+            setSize('40%')
+        }
+    },)
+
     return (
-        <Rodal visible={visible} onClose={hide} customStyles={{ fontSize : "12px" , height: '60%', width: '60%' }}>
+        <Rodal visible={visible} onClose={hide} customStyles={{ fontSize : "12px" , height: size, maxHeight:"80%" , width: '60%' }}>
                 <h2>Kết quả đánh giá</h2>
                 <table className="evaluation-table">
                     <thead>

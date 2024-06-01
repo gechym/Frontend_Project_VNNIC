@@ -2,7 +2,7 @@ import React from 'react';
 
 const suggestionsContainerStyle = {
     borderRadius: '8px',
-    width: '800px',
+    width: 'auto',
     margin: '10px auto',
 };
 

@@ -6,15 +6,48 @@ import 'rodal/lib/rodal.css';
 function Header() {
   const [domain, setDomain] = React.useState('')
   const [visible, setVisible] = React.useState(false)
-    
-  const data = {
-    url: 'daotaobaibip.com',
-    entropy: 2.6890,
-    percentageDigits: 0.0000,
-    domainLength: 16,
-    specialChars: 0,
-    result: 'Có tín nhiệm thấp'
+  const [selectedModel, setSelectedModel] = React.useState('Model PhoBert');
+  const [data, setData] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
+
+  // handle fetch data
+  const infer = async () => {
+    if (!domain) {
+      setError("Vui lòng nhập domain")
+      return;
+    }
+    setLoading(true);
+    try {
+      const response = await fetch('http://127.0.0.1:8000/api/infer', {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({domain: domain, model_name: selectedModel})
+      });
+      if (!response.ok) {
+        setError("Domain không hợp lê, vui lòng thử lại");
+      }
+      const result = await response.json();
+      setData({
+        url: domain,
+        entropy: result.data.entropy,
+        percentageDigits: result.data.percentageDigits,
+        domainLength: result.data.domainLength,
+        specialChars: result.data.specialChars,
+        result: result.data.result
+      
+      });
+      show();
+    } catch (error) {
+      setError("Có gì đó không đúng, vui lòng thử lại");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   const show = () => {
     setVisible(true)
@@ -22,11 +55,13 @@ function Header() {
 
   const hide = () => {
     setVisible(false)
+    setData(null)
+    setDomain('')
   }
   return (
     <>
       <header>
-        <EvaluationModal visible={visible} hide={hide} data={data} />
+        {data ? <EvaluationModal visible={visible} hide={hide} data={data} /> : null} 
         <div id="homepage-header">
           <div id="menu-mobile" className="hidden-lg hidden-md">
             <div className="menu-mb__head">
@@ -265,11 +300,22 @@ function Header() {
                         id="label"
                         name="label"
                         value={domain}
-                        onChange={(e) => setDomain(e.target.value)}  
+                        onChange={(e) => {
+                          setDomain(e.target.value)
+                          setError(null)
+                        }}  
                       />
+                      <span className="submit-search">|</span>
+                      <div className="input-group-append">
+                        <select className="form-select" value={selectedModel} onChange={(e) => {setSelectedModel(e.target.value)}}>
+                          <option value="Model PhoBert">Model PhoBert</option>
+                          <option value="Model XML Roberta">Model XML Roberta</option>
+                        </select>
+                      </div>
                     </div>
-                    <input onClick={show} style={{backgroundColor: '#F37032' ,outline: 'none'}} type="submit" className='btn' value="Đáng giá" />
+                    <input disabled={loading} onClick={infer} style={{backgroundColor: '#F37032' ,outline: 'none'}} type="submit" className='btn' value="Đáng giá" />
                   </div>
+                  <h4 style={{color:'red'}}>{error ? error : ""}</h4>
                 </div>
               </div>
             </div>
