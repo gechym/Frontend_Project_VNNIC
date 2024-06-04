@@ -1,7 +1,8 @@
 import React from "react";
 import EvaluationModal from "../components/EvaluationModal";
 import "rodal/lib/rodal.css";
-//import DragAndDropZone from "../components/DragandDropZone";
+import DragAndDropFileUpload from "../components/DragandDropFileUpload";
+import axios from "axios";
 
 function Header() {
   const [domain, setDomain] = React.useState("");
@@ -35,6 +36,7 @@ function Header() {
         },
         body: JSON.stringify({ domain: domain, model_name: selectedModel }),
       });
+      console.log("nam nam");
       if (!response.ok) {
         setError("Domain không hợp lê, vui lòng thử lại");
       }
@@ -55,19 +57,26 @@ function Header() {
     }
   };
 
-  const handleFileLoad = async (fileData) => {
+  const handleFileUpload = async (file) => {
     const formData = new FormData();
-    formData.append("file", fileData);
-
+    formData.append("file", file);
+    setLoading(true);
     try {
-      const response = await fetch(`http://${HOST}:8000/api/infer`, {
-        method: "POST",
-        body: { formData, model_name: selectedModel },
-      });
-      const data = await response.json();
-      setExcelData(data);
+      const response = await axios.post(
+        `http://${HOST}:8000/api/infer`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log("posted file!");
+      setExcelData(response.data);
     } catch (error) {
       console.error("Error uploading file:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -367,20 +376,32 @@ function Header() {
                         </select>
                       </div> */}
                     </div>
-                    <input
-                      disabled={loading}
-                      onClick={infer}
-                      style={{ backgroundColor: "#F37032", outline: "none" }}
-                      type="submit"
-                      className="btn"
-                      value="Đánh giá"
-                    />
                   </div>
                   <h4 style={{ color: "red" }}>{error ? error : ""}</h4>
-                  <div>
-                    {/* <DragAndDropZone onFileLoad={handleFileLoad} />
-                    {excelData && <p>Result: {JSON.stringify(excelData)}</p>} */}
-                  </div>
+                  <p
+                    style={{
+                      fontSize: "18px",
+                      color: "blue",
+                      padding: "10px 0px",
+                    }}
+                  >
+                    OR
+                  </p>
+                  <DragAndDropFileUpload onFileUpload={handleFileUpload} />
+                  <input
+                    disabled={loading}
+                    onClick={infer}
+                    style={{
+                      backgroundColor: "#F37032",
+                      outline: "none",
+                      margin: "10px 20px",
+                      borderRadius: "5px",
+                      color: "white",
+                    }}
+                    type="submit"
+                    className="btn"
+                    value="Đánh giá"
+                  />
                 </div>
               </div>
             </div>
