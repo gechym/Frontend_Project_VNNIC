@@ -3,18 +3,18 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
-const DragAndDropFileUpload = ({ onFileUpload }) => {
+const DragAndDropFileUpload = ({ file, handleRemoveFile , onFileUpload }) => {
   const [error, setError] = useState("");
   const onDrop = useCallback(
     (acceptedFiles) => {
-      const file = acceptedFiles[0];
-      if (file.size > 200 * 1024) {
-        // 200KB in bytes
-        setError("File size exceeds 200KB. Please upload a smaller file.");
-        console.log("File size exceeds 200KB. Please upload a smaller file.");
-        return;
-      }
-      onFileUpload(file);
+        const file = acceptedFiles[0];
+        if (file.size > 200 * 1024) {
+          // 200KB in bytes
+          setError("File size exceeds 200KB. Please upload a smaller file.");
+          console.log("File size exceeds 200KB. Please upload a smaller file.");
+          return;
+        }
+        onFileUpload(file);
     },
     [onFileUpload]
   );
@@ -27,9 +27,15 @@ const DragAndDropFileUpload = ({ onFileUpload }) => {
         <input {...getInputProps()} />
         {isDragActive ? (
           <p>Drop the files here ...</p>
-        ) : (
+        ) : file ? file.name : (
           <p>Drag and drop some files here, or click to select files</p>
         )}
+      <button onClick = {(e) => {
+        var evt = e ? e:window.event;
+        if (evt.stopPropagation)    evt.stopPropagation();
+        if (evt.cancelBubble!=null) evt.cancelBubble = true;
+        handleRemoveFile()
+      }}>Xóa</button>
       </div>
     </div>
   );

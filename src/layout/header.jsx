@@ -2,16 +2,17 @@ import React from "react";
 import EvaluationModal from "../components/EvaluationModal";
 import "rodal/lib/rodal.css";
 import DragAndDropFileUpload from "../components/DragandDropFileUpload";
-import axios from "axios";
 
 function Header() {
   const [domain, setDomain] = React.useState("");
   const [visible, setVisible] = React.useState(false);
   const [selectedModel, setSelectedModel] = React.useState("Model PhoBert");
+  
   const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
-  const [excelData, setExcelData] = React.useState(null);
+  const [file, setFile] = React.useState(null);
+  // const
   const HOST = "113.160.235.186";
 
   // handle fetch data
@@ -57,34 +58,33 @@ function Header() {
     }
   };
 
+  const handleRemoveFile = () => {
+    setFile(null)
+  }
   const handleFileUpload = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    setLoading(true);
+    setFile(file)
     console.log("posting file...");
     console.log(file);
-    try {
-      const response = await fetch(`http://${HOST}:8000/api/infer`, {
-        method: "post",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ file: formData, model_name: selectedModel }),
-      });
-      console.log("posted file!");
-      setExcelData(response.json());
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleKeyDown = async (event) => {
-    if (event.key === "Enter") {
-      await infer();
-    }
+    
+    // try {
+    //  setLoading(true);
+    //  formData.append("file", file);
+    //  const formData = new FormData();
+    //   const response = await fetch(`http://${HOST}:8000/api/infer`, {
+    //     method: "post",
+    //     headers: {
+    //       Accept: "application/json",
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ file: formData, model_name: selectedModel }),
+    //   });
+    //   console.log("posted file!");
+    //   setExcelData(response.json());
+    // } catch (error) {
+    //   console.error("Error uploading file:", error);
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   const show = () => {
@@ -388,7 +388,7 @@ function Header() {
                   >
                     OR
                   </p>
-                  <DragAndDropFileUpload onFileUpload={handleFileUpload} />
+                  <DragAndDropFileUpload file = {file} handleRemoveFile={handleRemoveFile} onFileUpload={handleFileUpload} />
                   <input
                     disabled={loading}
                     onClick={infer}
