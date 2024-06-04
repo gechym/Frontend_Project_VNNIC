@@ -1,38 +1,39 @@
-import React from 'react'
-import EvaluationModal from '../components/EvaluationModal';
-import 'rodal/lib/rodal.css';
-
+import React from "react";
+import EvaluationModal from "../components/EvaluationModal";
+import "rodal/lib/rodal.css";
+//import DragAndDropZone from "../components/DragandDropZone";
 
 function Header() {
-  const [domain, setDomain] = React.useState('')
-  const [visible, setVisible] = React.useState(false)
-  const [selectedModel, setSelectedModel] = React.useState('Model PhoBert');
+  const [domain, setDomain] = React.useState("");
+  const [visible, setVisible] = React.useState(false);
+  const [selectedModel, setSelectedModel] = React.useState("Model PhoBert");
   const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
-  const HOST = '113.160.235.186' 
+  const [excelData, setExcelData] = React.useState(null);
+  const HOST = "113.160.235.186";
 
   // handle fetch data
   const infer = async () => {
     if (!domain) {
-      setError("Vui lòng nhập domain")
+      setError("Vui lòng nhập domain");
       return;
     }
 
-    if(!domain.endsWith(".vn")){
-      setError("Hiện tại phạm vi dự án chỉ đánh giá tên miền .vn")
+    if (!domain.endsWith(".vn")) {
+      setError("Hiện tại phạm vi dự án chỉ đánh giá tên miền .vn");
       return;
     }
 
     setLoading(true);
     try {
       const response = await fetch(`http://${HOST}:8000/api/infer`, {
-        method: 'post',
+        method: "post",
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
+          Accept: "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({domain: domain, model_name: selectedModel})
+        body: JSON.stringify({ domain: domain, model_name: selectedModel }),
       });
       if (!response.ok) {
         setError("Domain không hợp lê, vui lòng thử lại");
@@ -44,8 +45,7 @@ function Header() {
         percentageDigits: result.data.percentageDigits,
         domainLength: result.data.domainLength,
         specialChars: result.data.specialChars,
-        result: result.data.result
-      
+        result: result.data.result,
       });
       show();
     } catch (error) {
@@ -55,27 +55,43 @@ function Header() {
     }
   };
 
+  const handleFileLoad = async (fileData) => {
+    const formData = new FormData();
+    formData.append("file", fileData);
+
+    try {
+      const response = await fetch(`http://${HOST}:8000/api/infer`, {
+        method: "POST",
+        body: { formData, model_name: selectedModel },
+      });
+      const data = await response.json();
+      setExcelData(data);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+  };
+
   const handleKeyDown = async (event) => {
-    
     if (event.key === "Enter") {
       await infer();
     }
   };
 
-
   const show = () => {
-    setVisible(true)
-  }
+    setVisible(true);
+  };
 
   const hide = () => {
-    setVisible(false)
-    setData(null)
-    setDomain('')
-  }
+    setVisible(false);
+    setData(null);
+    setDomain("");
+  };
   return (
     <>
       <header>
-        {data ? <EvaluationModal visible={visible} hide={hide} data={data} /> : null} 
+        {data ? (
+          <EvaluationModal visible={visible} hide={hide} data={data} />
+        ) : null}
         <div id="homepage-header">
           <div id="menu-mobile" className="hidden-lg hidden-md">
             <div className="menu-mb__head">
@@ -112,61 +128,74 @@ function Header() {
             <div className="menu-mb__body">
               <ul className="menu-mb__list">
                 <li className="menu-mb__item main-item has-child">
-                  <a title="Trang chủ" href="/">Trang chủ</a>
+                  <a title="Trang chủ" href="/">
+                    Trang chủ
+                  </a>
                 </li>
                 <li className="menu-mb__item main-item has-child">
                   <a title="Tên miền">Tên miền</a>
-                  <span className="dropdown-icon"
-                    ><i className="fa fa-caret-down" aria-hidden="true"></i
-                  ></span>
+                  <span className="dropdown-icon">
+                    <i className="fa fa-caret-down" aria-hidden="true"></i>
+                  </span>
                   <ul className="menu-mb__sub">
                     <li className="menu-mb__sub-item">
-                      <a href="/dang-ky-ten-mien"
-                        ><i className="fa fa-caret-right" aria-hidden="true"></i> Đăng
-                        ký tên miền</a>
+                      <a href="/dang-ky-ten-mien">
+                        <i className="fa fa-caret-right" aria-hidden="true"></i>{" "}
+                        Đăng ký tên miền
+                      </a>
                     </li>
                     <li className="menu-mb__sub-item">
-                      <a href="/nha-dang-ky"
-                        ><i className="fa fa-caret-right" aria-hidden="true"></i> Nhà
-                        đăng ký</a>
+                      <a href="/nha-dang-ky">
+                        <i className="fa fa-caret-right" aria-hidden="true"></i>{" "}
+                        Nhà đăng ký
+                      </a>
                     </li>
                     <li className="menu-mb__sub-item">
-                      <a href="/quan-ly-ten-mien"
-                        ><i className="fa fa-caret-right" aria-hidden="true"></i> Quản
-                        lý tên miền</a>
+                      <a href="/quan-ly-ten-mien">
+                        <i className="fa fa-caret-right" aria-hidden="true"></i>{" "}
+                        Quản lý tên miền
+                      </a>
                     </li>
                     <li className="menu-mb__sub-item">
-                      <a href="/tenmien/cam_nang_ten_mien_final.pdf"
-                        ><i className="fa fa-caret-right" aria-hidden="true"></i> Cẩm
-                        nang tên miền</a>
+                      <a href="/tenmien/cam_nang_ten_mien_final.pdf">
+                        <i className="fa fa-caret-right" aria-hidden="true"></i>{" "}
+                        Cẩm nang tên miền
+                      </a>
                     </li>
                   </ul>
                 </li>
                 <li className="menu-mb__item main-item has-child highlight">
-                  <a title="Chương trình đặc biệt"
-                    >Chương trình đặc biệt<span className="star">&#9733;</span></a>
-                  <span className="dropdown-icon"
-                    ><i className="fa fa-caret-down" aria-hidden="true"></i></span>
+                  <a title="Chương trình đặc biệt">
+                    Chương trình đặc biệt<span className="star">&#9733;</span>
+                  </a>
+                  <span className="dropdown-icon">
+                    <i className="fa fa-caret-down" aria-hidden="true"></i>
+                  </span>
                   <ul className="menu-mb__sub">
                     <li className="menu-mb__sub-item">
-                      <a href="https://guongmatso.tenmien.vn" target="_blank"
-                        ><i className="fa fa-caret-right" aria-hidden="true"></i>
-                        Chương trình id.vn</a>
+                      <a href="https://guongmatso.tenmien.vn" target="_blank">
+                        <i className="fa fa-caret-right" aria-hidden="true"></i>
+                        Chương trình id.vn
+                      </a>
                     </li>
                     <li className="menu-mb__sub-item">
-                      <a href="https://thuonghieuso.tenmien.vn" target="_blank"
-                        ><i className="fa fa-caret-right" aria-hidden="true"></i>
-                        Chương tình biz.vn</a>
+                      <a href="https://thuonghieuso.tenmien.vn" target="_blank">
+                        <i className="fa fa-caret-right" aria-hidden="true"></i>
+                        Chương tình biz.vn
+                      </a>
                     </li>
                     <li className="menu-mb__sub-item">
-                      <a href="/tai-lieu-truyen-thong"
-                        ><i className="fa fa-caret-right" aria-hidden="true"></i> Tài
-                        liệu truyền thông</a>
+                      <a href="/tai-lieu-truyen-thong">
+                        <i className="fa fa-caret-right" aria-hidden="true"></i>{" "}
+                        Tài liệu truyền thông
+                      </a>
                     </li>
                   </ul>
                 </li>
                 <li className="menu-mb__item main-item has-child">
-                  <a title="Blog" href="/blog">Blog</a>
+                  <a title="Blog" href="/blog">
+                    Blog
+                  </a>
                 </li>
               </ul>
             </div>
@@ -219,9 +248,7 @@ function Header() {
                   </div>
                 </div>
 
-                <div
-                  className="col-lg-6 col-md-6 col-sm-2 col-xs-2 header-top__right-space"
-                >
+                <div className="col-lg-6 col-md-6 col-sm-2 col-xs-2 header-top__right-space">
                   <div className="header-top__right">
                     <div className="content-nav header-top__right-bound">
                       <div className="dropdown tenmien">
@@ -245,7 +272,9 @@ function Header() {
                             <a href="/quan-ly-ten-mien">Quản lý tên miền</a>
                           </li>
                           <li>
-                            <a href="/tenmien/cam_nang_ten_mien_final.pdf">Cẩm nang tên miền</a>
+                            <a href="/tenmien/cam_nang_ten_mien_final.pdf">
+                              Cẩm nang tên miền
+                            </a>
                           </li>
                         </ul>
                       </div>
@@ -256,30 +285,39 @@ function Header() {
                           type="button"
                           data-toggle="dropdown"
                         >
-                          <a className="top-direction-button highlight"
-                            >Chương trình đặc biệt
-                            <span className="star">&#9733;</span><span className="caret"></span></a>
+                          <a className="top-direction-button highlight">
+                            Chương trình đặc biệt
+                            <span className="star">&#9733;</span>
+                            <span className="caret"></span>
+                          </a>
                         </button>
                         <ul className="dropdown-menu">
                           <li>
                             <a
                               href="https://guongmatso.tenmien.vn"
                               target="_blank"
-                              >Chương trình id.vn</a>
+                            >
+                              Chương trình id.vn
+                            </a>
                           </li>
                           <li>
                             <a
                               href="https://thuonghieuso.tenmien.vn"
                               target="_blank"
-                              >Chương trình biz.vn</a>
+                            >
+                              Chương trình biz.vn
+                            </a>
                           </li>
                           <li>
-                            <a href="/tai-lieu-truyen-thong"
-                              >Tài liệu truyền thông</a>
+                            <a href="/tai-lieu-truyen-thong">
+                              Tài liệu truyền thông
+                            </a>
                           </li>
                         </ul>
                       </div>
-                      <a href="/blog" className="top-direction-button">Blog</a>
+                      <a href="/blog" className="top-direction-button">
+                        Blog
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -298,7 +336,8 @@ function Header() {
                       />
                     </div>
                     <h1 className="main-quote">
-                      Đánh giá <span className="spec-quote">tín nhiệm</span> tên miền
+                      Đánh giá <span className="spec-quote">tín nhiệm</span> tên
+                      miền
                     </h1>
                   </div>
                   <div className="search-bar">
@@ -312,14 +351,13 @@ function Header() {
                         id="label"
                         name="label"
                         value={domain}
-                        onKeyDown={ async (e) => { 
-                          if (e.key === "Enter") 
-                              await infer()
-                          }} 
-                        onChange={ async (e) => {
-                          setDomain(e.target.value)
-                          setError(null)
-                        }}  
+                        onKeyDown={async (e) => {
+                          if (e.key === "Enter") await infer();
+                        }}
+                        onChange={async (e) => {
+                          setDomain(e.target.value);
+                          setError(null);
+                        }}
                       />
                       {/* <span className="submit-search">|</span>
                       <div className="input-group-append">
@@ -329,9 +367,20 @@ function Header() {
                         </select>
                       </div> */}
                     </div>
-                    <input disabled={loading} onClick={infer} style={{backgroundColor: '#F37032' ,outline: 'none'}} type="submit" className='btn' value="Đánh giá" />
+                    <input
+                      disabled={loading}
+                      onClick={infer}
+                      style={{ backgroundColor: "#F37032", outline: "none" }}
+                      type="submit"
+                      className="btn"
+                      value="Đánh giá"
+                    />
                   </div>
-                  <h4 style={{color:'red'}}>{error ? error : ""}</h4>
+                  <h4 style={{ color: "red" }}>{error ? error : ""}</h4>
+                  <div>
+                    {/* <DragAndDropZone onFileLoad={handleFileLoad} />
+                    {excelData && <p>Result: {JSON.stringify(excelData)}</p>} */}
+                  </div>
                 </div>
               </div>
             </div>
@@ -394,7 +443,7 @@ function Header() {
         </div>
       </header>
     </>
-  )
+  );
 }
 
-export default Header
+export default Header;
