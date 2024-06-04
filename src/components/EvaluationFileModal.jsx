@@ -28,8 +28,8 @@ const EvaluationFileModal = ({ visible, hide, dataList }) => {
         >
             <h2>Kết quả đánh giá</h2>
             <i>*Kết quả dự đoán từ model ngôn ngữ có tính chất kham khảo</i>
-            <div>
-                <table className="evaluation-table" style = {{overflow : "scroll"}}>
+            <div style = {{overflow : "scroll" ,width : "100%" , height:"600px"}} >
+                <table className="evaluation-table" >
                     <thead>
                         <tr>
                             <th>URL</th>
