@@ -17,7 +17,10 @@ const EvaluationModal = ({ visible, hide, data }) => {
     },)
 
     return (
-        <Rodal visible={visible} onClose={hide} customStyles={{ fontSize : "12px" , height: size, maxHeight:"80%" , width: '60%' }}>
+        <Rodal  onKeyDown={ (e) => { 
+            if (e.key === "esc") 
+                hide()
+            }}  visible={visible} onClose={hide} customStyles={{ fontSize : "12px" , height: size, maxHeight:"80%" , width: '60%' }}>
                 <h2>Kết quả đánh giá</h2>
                 <table className="evaluation-table">
                     <thead>

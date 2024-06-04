@@ -10,6 +10,7 @@ function Header() {
   const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
+  const HOST = '113.160.235.186' 
 
   // handle fetch data
   const infer = async () => {
@@ -17,9 +18,15 @@ function Header() {
       setError("Vui lòng nhập domain")
       return;
     }
+
+    if(!domain.endsWith(".vn")){
+      setError("Hiện tại phạm vi dự án chỉ đánh giá tên miền .vn")
+      return;
+    }
+
     setLoading(true);
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/infer', {
+      const response = await fetch(`http://${HOST}:8000/api/infer`, {
         method: 'post',
         headers: {
           'Accept': 'application/json',
@@ -45,6 +52,13 @@ function Header() {
       setError("Có gì đó không đúng, vui lòng thử lại");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleKeyDown = async (event) => {
+    
+    if (event.key === "Enter") {
+      await infer();
     }
   };
 
@@ -285,8 +299,6 @@ function Header() {
                     </div>
                     <h1 className="main-quote">
                       Đánh giá <span className="spec-quote">tín nhiệm</span> tên miền
-                      <br />
-                      Tạo <span className="spec-quote">uy tín</span> thương hiệu
                     </h1>
                   </div>
                   <div className="search-bar">
@@ -300,20 +312,24 @@ function Header() {
                         id="label"
                         name="label"
                         value={domain}
-                        onChange={(e) => {
+                        onKeyDown={ async (e) => { 
+                          if (e.key === "Enter") 
+                              await infer()
+                          }} 
+                        onChange={ async (e) => {
                           setDomain(e.target.value)
                           setError(null)
                         }}  
                       />
-                      <span className="submit-search">|</span>
+                      {/* <span className="submit-search">|</span>
                       <div className="input-group-append">
                         <select className="form-select" value={selectedModel} onChange={(e) => {setSelectedModel(e.target.value)}}>
                           <option value="Model PhoBert">Model PhoBert</option>
                           <option value="Model XML Roberta">Model XML Roberta</option>
                         </select>
-                      </div>
+                      </div> */}
                     </div>
-                    <input disabled={loading} onClick={infer} style={{backgroundColor: '#F37032' ,outline: 'none'}} type="submit" className='btn' value="Đáng giá" />
+                    <input disabled={loading} onClick={infer} style={{backgroundColor: '#F37032' ,outline: 'none'}} type="submit" className='btn' value="Đánh giá" />
                   </div>
                   <h4 style={{color:'red'}}>{error ? error : ""}</h4>
                 </div>
