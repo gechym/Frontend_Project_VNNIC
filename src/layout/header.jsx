@@ -1,18 +1,18 @@
 import React from "react";
 import EvaluationModal from "../components/EvaluationModal";
-import EvaluationFileModal from "../components/EvaluationFileModal"
+import EvaluationFileModal from "../components/EvaluationFileModal";
 import "rodal/lib/rodal.css";
 import DragAndDropFileUpload from "../components/DragandDropFileUpload";
-import axios from 'axios'
+import axios from "axios";
 
 function Header() {
   const [domain, setDomain] = React.useState("");
   const [visible, setVisible] = React.useState(false);
   const [visibleModalFile, setvisibleModalFile] = React.useState(false);
   const [selectedModel, setSelectedModel] = React.useState("Model PhoBert");
-  
+
   const [data, setData] = React.useState(null);
-  const [listData , setListData] = React.useState([]);
+  const [listData, setListData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [file, setFile] = React.useState(null);
@@ -20,6 +20,15 @@ function Header() {
   const HOST = "113.160.235.186";
 
   // handle fetch data
+  const summitHandler = async () => {
+    if (file) {
+      showFile();
+      setError(null);
+      setFile(null);
+    } else {
+      infer();
+    }
+  };
   const infer = async () => {
     if (!domain) {
       setError("Vui lòng nhập domain");
@@ -63,28 +72,32 @@ function Header() {
   };
 
   const handleRemoveFile = () => {
-    setFile(null)
-  }
+    setFile(null);
+  };
   const handleFileUpload = async (file) => {
-    setFile(file)
+    setFile(file);
     console.log("posting file...");
     console.log(file);
     try {
       setLoading(true);
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("model_name" , selectedModel)
-      const response = await axios.post(`http://${HOST}:8000/api/infer_file`, formData, {
-        headers: {
-          'Content-Type': file.type
+      formData.append("model_name", selectedModel);
+      const response = await axios.post(
+        `http://${HOST}:8000/api/infer_file`,
+        formData,
+        {
+          headers: {
+            "Content-Type": file.type,
+          },
         }
-      });
+      );
       console.log("posted file!");
       // Truyền data vô cái modal
-      setListData(response.data)
-      showFile()
-      setError(null)
-      setFile(null)
+      setListData(response.data);
+      //showFile();
+      // setError(null);
+      // setFile(null);
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
@@ -96,35 +109,34 @@ function Header() {
     setVisible(true);
   };
 
-  
-
   const hide = () => {
     setVisible(false);
     setData(null);
-    setListData([])
+    setListData([]);
     setDomain("");
   };
 
   const showFile = () => {
-    setvisibleModalFile(true)
-  }
-
-  const hideModalFile = () => {
-    setvisibleModalFile(false)
-    setData(null);
-    setListData([])
-    setDomain("");
+    setvisibleModalFile(true);
   };
 
+  const hideModalFile = () => {
+    setvisibleModalFile(false);
+    setData(null);
+    setListData([]);
+    setDomain("");
+  };
 
   return (
     <>
       <header>
-        {
-          listData.length ? (
-            <EvaluationFileModal visible={visibleModalFile} hide={hideModalFile} dataList={listData} />
-          ) : null
-        }
+        {listData.length ? (
+          <EvaluationFileModal
+            visible={visibleModalFile}
+            hide={hideModalFile}
+            dataList={listData}
+          />
+        ) : null}
         {data ? (
           <EvaluationModal visible={visible} hide={hide} data={data} />
         ) : null}
@@ -414,10 +426,14 @@ function Header() {
                   >
                     OR
                   </p>
-                  <DragAndDropFileUpload file = {file} handleRemoveFile={handleRemoveFile} onFileUpload={handleFileUpload} />
+                  <DragAndDropFileUpload
+                    file={file}
+                    handleRemoveFile={handleRemoveFile}
+                    onFileUpload={handleFileUpload}
+                  />
                   <input
                     disabled={loading}
-                    onClick={infer}
+                    onClick={summitHandler}
                     style={{
                       backgroundColor: "#F37032",
                       outline: "none",
@@ -427,7 +443,7 @@ function Header() {
                     }}
                     type="submit"
                     className="btn"
-                    value={loading ?  "Đang xử lý" : "Đánh giá"}
+                    value={loading ? "Đang xử lý" : "Đánh giá"}
                   />
                 </div>
               </div>
