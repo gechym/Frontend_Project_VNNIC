@@ -1,14 +1,18 @@
 import React from "react";
 import EvaluationModal from "../components/EvaluationModal";
+import EvaluationFileModal from "../components/EvaluationFileModal"
 import "rodal/lib/rodal.css";
 import DragAndDropFileUpload from "../components/DragandDropFileUpload";
+import axios from 'axios'
 
 function Header() {
   const [domain, setDomain] = React.useState("");
   const [visible, setVisible] = React.useState(false);
+  const [visibleModalFile, setvisibleModalFile] = React.useState(false);
   const [selectedModel, setSelectedModel] = React.useState("Model PhoBert");
   
   const [data, setData] = React.useState(null);
+  const [listData , setListData] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [file, setFile] = React.useState(null);
@@ -65,40 +69,62 @@ function Header() {
     setFile(file)
     console.log("posting file...");
     console.log(file);
-    
-    // try {
-    //  setLoading(true);
-    //  formData.append("file", file);
-    //  const formData = new FormData();
-    //   const response = await fetch(`http://${HOST}:8000/api/infer`, {
-    //     method: "post",
-    //     headers: {
-    //       Accept: "application/json",
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ file: formData, model_name: selectedModel }),
-    //   });
-    //   console.log("posted file!");
-    //   setExcelData(response.json());
-    // } catch (error) {
-    //   console.error("Error uploading file:", error);
-    // } finally {
-    //   setLoading(false);
-    // }
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("model_name" , selectedModel)
+      const response = await axios.post(`http://${HOST}:8000/api/infer_file`, formData, {
+        headers: {
+          'Content-Type': file.type
+        }
+      });
+      console.log("posted file!");
+      // Truyền data vô cái modal
+      setListData(response.data)
+      showFile()
+      setError(null)
+      setFile(null)
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const show = () => {
     setVisible(true);
   };
 
+  
+
   const hide = () => {
     setVisible(false);
     setData(null);
+    setListData([])
     setDomain("");
   };
+
+  const showFile = () => {
+    setvisibleModalFile(true)
+  }
+
+  const hideModalFile = () => {
+    setvisibleModalFile(false)
+    setData(null);
+    setListData([])
+    setDomain("");
+  };
+
+
   return (
     <>
       <header>
+        {
+          listData.length ? (
+            <EvaluationFileModal visible={visibleModalFile} hide={hideModalFile} dataList={listData} />
+          ) : null
+        }
         {data ? (
           <EvaluationModal visible={visible} hide={hide} data={data} />
         ) : null}
@@ -401,7 +427,7 @@ function Header() {
                     }}
                     type="submit"
                     className="btn"
-                    value="Đánh giá"
+                    value={loading ?  "Đang xử lý" : "Đánh giá"}
                   />
                 </div>
               </div>
