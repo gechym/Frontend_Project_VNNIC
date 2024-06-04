@@ -11,6 +11,7 @@ const DragAndDropFileUpload = ({ onFileUpload }) => {
       if (file.size > 200 * 1024) {
         // 200KB in bytes
         setError("File size exceeds 200KB. Please upload a smaller file.");
+        console.log("File size exceeds 200KB. Please upload a smaller file.");
         return;
       }
       onFileUpload(file);

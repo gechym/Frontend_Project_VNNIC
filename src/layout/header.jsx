@@ -61,18 +61,19 @@ function Header() {
     const formData = new FormData();
     formData.append("file", file);
     setLoading(true);
+    console.log("posting file...");
+    console.log(file);
     try {
-      const response = await axios.post(
-        `http://${HOST}:8000/api/infer`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await fetch(`http://${HOST}:8000/api/infer`, {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ file: formData, model_name: selectedModel }),
+      });
       console.log("posted file!");
-      setExcelData(response.data);
+      setExcelData(response.json());
     } catch (error) {
       console.error("Error uploading file:", error);
     } finally {
