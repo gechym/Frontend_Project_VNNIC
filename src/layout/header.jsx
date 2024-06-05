@@ -9,7 +9,7 @@ function Header() {
   const [domain, setDomain] = React.useState("");
   const [visible, setVisible] = React.useState(false);
   const [visibleModalFile, setvisibleModalFile] = React.useState(false);
-  const [selectedModel, setSelectedModel] = React.useState("Model PhoBert");
+  const [selectedModel, setSelectedModel] = React.useState("Model XML Roberta");
 
   const [data, setData] = React.useState(null);
   const [listData, setListData] = React.useState([]);
