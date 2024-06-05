@@ -22,9 +22,31 @@ function Header() {
   // handle fetch data
   const summitHandler = async () => {
     if (file) {
-      showFile();
-      setError(null);
-      setFile(null);
+      try {
+        setLoading(true);
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("model_name", selectedModel);
+        const response = await axios.post(
+          `http://${HOST}:8000/api/infer_file`,
+          formData,
+          {
+            headers: {
+              "Content-Type": file.type,
+            },
+          }
+        );
+        console.log("posted file!");
+        // Truyền data vô cái modal
+        setListData(response.data);
+        showFile();
+        setError(null);
+        setFile(null);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      } finally {
+        setLoading(false);
+      }
     } else {
       infer();
     }
@@ -78,31 +100,6 @@ function Header() {
     setFile(file);
     console.log("posting file...");
     console.log(file);
-    try {
-      setLoading(true);
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("model_name", selectedModel);
-      const response = await axios.post(
-        `http://${HOST}:8000/api/infer_file`,
-        formData,
-        {
-          headers: {
-            "Content-Type": file.type,
-          },
-        }
-      );
-      console.log("posted file!");
-      // Truyền data vô cái modal
-      setListData(response.data);
-      //showFile();
-      // setError(null);
-      // setFile(null);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const show = () => {
