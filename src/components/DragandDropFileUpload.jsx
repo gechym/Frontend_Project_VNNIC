@@ -1,16 +1,14 @@
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
-
-const DragAndDropFileUpload = ({ file, handleRemoveFile, onFileUpload }) => {
-  const [error, setError] = useState("");
+const DragAndDropFileUpload = ({ file, handleRemoveFile,setError, onFileUpload }) => {
   const onDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
       if (file.size > 200 * 1024) {
         // 200KB in bytes
-        setError("File size exceeds 200KB. Please upload a smaller file.");
-        console.log("File size exceeds 200KB. Please upload a smaller file.");
+        setError("Vui lòng tải lên tệp có kích thước nhỏ hơn 200KB")
         return;
+        
       }
       onFileUpload(file);
     },
