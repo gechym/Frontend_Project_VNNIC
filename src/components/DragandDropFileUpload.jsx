@@ -26,7 +26,9 @@ const DragAndDropFileUpload = ({ file, handleRemoveFile,setError, onFileUpload }
         ) : file ? (
           file.name
         ) : (
-          <p>Drag and drop some files here, or click to select files</p>
+          <>
+            <p styl>Kéo thả hoặc chọn file</p><br/>
+          </>
         )}
         <button
           onClick={(e) => {
@@ -43,6 +45,7 @@ const DragAndDropFileUpload = ({ file, handleRemoveFile,setError, onFileUpload }
           Bỏ chọn
         </button>
       </div>
+        
     </div>
   );
 };
@@ -52,13 +55,15 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     display: "flex",
-    border: "2px solid black",
+    border: "1px solid ",
     borderRadius: "4px",
     height: "160px",
     margin: "0px 340px",
     textAlign: "center",
     cursor: "pointer",
     color: "black",
+    borderColor: '#979A9A',
+    flexDirection: "column"
   },
   cancelBtn: {
     height: "30px",
@@ -67,7 +72,6 @@ const styles = {
     backgroundColor: "#FF6600",
     borderRadius: "8px",
     border: "none",
-    margin: "20px 0px",
     textAlign: "center",
     justifyContent: "center",
     color: "white",

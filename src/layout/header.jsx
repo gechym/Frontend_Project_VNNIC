@@ -421,7 +421,7 @@ function Header() {
                       padding: "10px 0px",
                     }}
                   >
-                    OR
+                    Hoặc nhập file
                   </p>
                   <DragAndDropFileUpload
                     file={file}
