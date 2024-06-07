@@ -427,7 +427,7 @@ function Header() {
                     file={file}
                     handleRemoveFile={handleRemoveFile}
                     onFileUpload={handleFileUpload}
-                    setError = {setError}
+                    setError={setError}
                   />
                   <input
                     disabled={loading}
