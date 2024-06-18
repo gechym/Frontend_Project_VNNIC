@@ -1,7 +1,7 @@
 import React from 'react'
 import EvaluationModal from '../components/EvaluationModal';
 import 'rodal/lib/rodal.css';
-
+import { Link } from 'react-router-dom';
 
 function Header() {
   const [domain, setDomain] = React.useState('')
@@ -279,7 +279,8 @@ function Header() {
                           </li>
                         </ul>
                       </div>
-                      <a href="/blog" className="top-direction-button">Blog</a>
+                      {/* <a href="/blog" className="top-direction-button">Blog</a> */}
+                      <Link to="/login" className="top-direction-button">Login</Link>
                     </div>
                   </div>
                 </div>

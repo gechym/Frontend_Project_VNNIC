@@ -1,9 +1,9 @@
-import React from 'react'
-import './styles/LoginForm.css'
+import React from 'react';
+import './styles/LoginForm.css';
 import { FaUserAlt } from "react-icons/fa";
 import { FaLock } from "react-icons/fa";
 
-function LoginForm() {
+const LoginForm = () => {
   return (
     <div className='wrapper'>
         <form action="">
@@ -30,4 +30,4 @@ function LoginForm() {
   )
 }
 
-export default LoginForm
+export default LoginForm;
