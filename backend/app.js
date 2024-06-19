@@ -1,9 +1,17 @@
 import express from 'express';
 import dbConnect from './dbConnect.js';
 import cors from 'cors';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+console.log('Environment Variables:', process.env);
+
+// Log to ensure this line is being executed
+console.log('Attempting to connect to MongoDB...');
 
 // Execute database connection
 dbConnect();

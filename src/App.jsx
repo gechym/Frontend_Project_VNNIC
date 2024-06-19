@@ -5,7 +5,7 @@ import Header from './layout/header'
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [data, setData] = useState(null);
-  //gọi api từ backend
+//gọi api từ backend
   useEffect(() => {
     fetch('http://localhost:5000/api/data')
       .then((response) => {
