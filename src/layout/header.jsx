@@ -1,6 +1,7 @@
 import React from "react";
 import EvaluationModal from "../components/EvaluationModal";
 import EvaluationFileModal from "../components/EvaluationFileModal";
+import EvaluationFileModalLogged from "../components/EvaluationFileModalLogged";
 import "rodal/lib/rodal.css";
 import DragAndDropFileUpload from "../components/DragandDropFileUpload";
 import axios from "axios";
@@ -9,6 +10,8 @@ function Header() {
   const [domain, setDomain] = React.useState("");
   const [visible, setVisible] = React.useState(false);
   const [visibleModalFile, setvisibleModalFile] = React.useState(false);
+  const [visibleModalFileLogged, setvisibleModalFileLogged] =
+    React.useState(false);
   const [selectedModel, setSelectedModel] = React.useState("Model XML Roberta");
 
   const [data, setData] = React.useState(null);
@@ -117,6 +120,10 @@ function Header() {
     setvisibleModalFile(true);
   };
 
+  const showFileLogged = () => {
+    setvisibleModalFileLogged(true);
+  };
+
   const hideModalFile = () => {
     setvisibleModalFile(false);
     setData(null);
@@ -130,6 +137,13 @@ function Header() {
         {listData.length ? (
           <EvaluationFileModal
             visible={visibleModalFile}
+            hide={hideModalFile}
+            dataList={listData}
+          />
+        ) : null}
+        {listData.length ? (
+          <EvaluationFileModalLogged
+            visible={visibleModalFileLogged}
             hide={hideModalFile}
             dataList={listData}
           />
