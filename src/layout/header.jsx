@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import EvaluationModal from '../components/EvaluationModal';
 import 'rodal/lib/rodal.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
   const [domain, setDomain] = React.useState('')
@@ -10,7 +10,21 @@ function Header() {
   const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
-  const HOST = '113.160.235.186' 
+  const HOST = '127.0.0.1' 
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loggedInStatus = localStorage.getItem('isLoggedIn');
+    setIsLoggedIn(loggedInStatus === 'true');
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
+    navigate('/');
+  };
 
   // handle fetch data
   const infer = async () => {
@@ -280,7 +294,12 @@ function Header() {
                         </ul>
                       </div>
                       {/* <a href="/blog" className="top-direction-button">Blog</a> */}
-                      <Link to="/login" className="top-direction-button">Login</Link>
+                      {/* <Link to="/login" className="top-direction-button">Login</Link> */}
+                      {isLoggedIn ? (
+                        <button onClick={handleLogout} className="top-direction-button">Logout</button>
+                      ) : (
+                        <Link to="/login" className="top-direction-button">Login</Link>
+                      )}
                     </div>
                   </div>
                 </div>

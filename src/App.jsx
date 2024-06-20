@@ -7,6 +7,7 @@ function App() {
   const [data, setData] = useState(null);
 //gọi api từ backend
   useEffect(() => {
+    //
     fetch('http://localhost:5000/api/data')
       .then((response) => {
         if (!response.ok) {
