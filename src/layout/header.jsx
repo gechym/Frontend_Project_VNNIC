@@ -1,9 +1,10 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import EvaluationModal from "../components/EvaluationModal";
 import EvaluationFileModal from "../components/EvaluationFileModal";
 import "rodal/lib/rodal.css";
 import DragAndDropFileUpload from "../components/DragandDropFileUpload";
 import axios from "axios";
+import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
   const [domain, setDomain] = React.useState("");
@@ -18,6 +19,20 @@ function Header() {
   const [file, setFile] = React.useState(null);
   // const
   const HOST = "127.0.0.1";
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const loggedInStatus = localStorage.getItem('isLoggedIn');
+    setIsLoggedIn(loggedInStatus === 'true');
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    setIsLoggedIn(false);
+    navigate('/');
+  };
 
   // handle fetch data
   const summitHandler = async () => {
@@ -360,9 +375,14 @@ function Header() {
                           </li>
                         </ul>
                       </div>
-                      <a href="/blog" className="top-direction-button">
+                      {/* <a href="/blog" className="top-direction-button">
                         Blog
-                      </a>
+                      </a> */}
+                      {isLoggedIn ? (
+                        <button onClick={handleLogout} className="top-direction-button">Logout</button>
+                      ) : (
+                        <Link to="/login" className="top-direction-button">Login</Link>
+                      )}
                     </div>
                   </div>
                 </div>
