@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import EvaluationModal from "../components/EvaluationModal";
 import EvaluationFileModal from "../components/EvaluationFileModal";
+import LoggedInModal from "../components/LoggedInModal";
 import "rodal/lib/rodal.css";
 import DragAndDropFileUpload from "../components/DragandDropFileUpload";
 import axios from "axios";
@@ -142,13 +143,24 @@ function Header() {
   return (
     <>
       <header>
-        {listData.length ? (
+        {/* {listData.length ? (
           <EvaluationFileModal
             visible={visibleModalFile}
             hide={hideModalFile}
             dataList={listData}
           />
-        ) : null}
+        ) : null} */}
+        {isLoggedIn ? (
+          <LoggedInModal visible={visibleModalFile} hide={hideModalFile} />
+        ) : (
+          listData.length ? (
+            <EvaluationFileModal
+              visible={visibleModalFile}
+              hide={hideModalFile}
+              dataList={listData}
+            />
+          ) : null
+        )}
         {data ? (
           <EvaluationModal visible={visible} hide={hide} data={data} />
         ) : null}
