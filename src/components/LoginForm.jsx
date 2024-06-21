@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import './styles/LoginForm.css';
-import { FaUserAlt } from 'react-icons/fa';
-import { FaLock } from 'react-icons/fa';
+import { FaUserAlt, FaLock } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();  // Khởi tạo navigate
-
-  const API_BASE_URL = 'http://localhost:5000' || process.env.REACT_APP_API_URL;
+  const navigate = useNavigate();
+  const API_BASE_URL = 'http://127.0.0.1:8000' || process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log("API_BASE_URL:", API_BASE_URL);  // Log API URL
 
     try {
-        const response = await fetch(`${API_BASE_URL}/api/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -23,14 +22,17 @@ const LoginForm = () => {
         body: JSON.stringify({ username, password }),
       });
 
+      // Read the response body once
+      const data = await response.json();
+      console.log("Response data:", data); // Log the response data
+
       if (response.ok) {
-        // Handle successful login
         console.log('Login successful');
-        localStorage.setItem('isLoggedIn', 'true'); // Lưu trạng thái đăng nhập
-        navigate('/'); // Điều hướng về trang chính
+        localStorage.setItem('isLoggedIn', 'true');
+        navigate('/');
       } else {
-        // Handle failed login
         console.error('Login failed');
+        alert(data.detail); // Show the error message
       }
     } catch (error) {
       console.error('Error during login:', error);
