@@ -91,7 +91,14 @@ function Header() {
   return (
     <>
       <header>
-        {data ? <EvaluationModal visible={visible} hide={hide} data={data} /> : null} 
+        {/* {data ? <EvaluationModal visible={visible} hide={hide} data={data} /> : null}  */}
+        {data ? (
+          isLoggedIn ? (
+            <LoggedInModal visible={visible} hide={hide} data={data} />
+          ) : (
+            <EvaluationModal visible={visible} hide={hide} data={data} />
+          )
+        ) : null}
         <div id="homepage-header">
           <div id="menu-mobile" className="hidden-lg hidden-md">
             <div className="menu-mb__head">
