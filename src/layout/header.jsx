@@ -17,7 +17,7 @@ function Header() {
   const [error, setError] = React.useState(null);
   const [file, setFile] = React.useState(null);
   // const
-  const HOST = "113.160.235.186";
+  const HOST = "127.0.0.1";
 
   // handle fetch data
   const summitHandler = async () => {
