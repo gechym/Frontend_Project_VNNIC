@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import EvaluationModal from "../components/EvaluationModal";
 import EvaluationFileModal from "../components/EvaluationFileModal";
 import LoggedInModal from "../components/LoggedInModal";
 import "rodal/lib/rodal.css";
 import DragAndDropFileUpload from "../components/DragandDropFileUpload";
 import axios from "axios";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 
 function Header() {
   const [domain, setDomain] = React.useState("");
@@ -25,14 +25,14 @@ function Header() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loggedInStatus = localStorage.getItem('isLoggedIn');
-    setIsLoggedIn(loggedInStatus === 'true');
+    const loggedInStatus = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(loggedInStatus === "true");
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
-    navigate('/');
+    navigate("/");
   };
 
   // handle fetch data
@@ -150,17 +150,21 @@ function Header() {
             dataList={listData}
           />
         ) : null} */}
-        {isLoggedIn ? (
-          <LoggedInModal visible={visibleModalFile} hide={hideModalFile} />
-        ) : (
-          listData.length ? (
+        {listData.length ? (
+          isLoggedIn ? (
+            <LoggedInModal
+              visible={visibleModalFile}
+              hide={hideModalFile}
+              dataList={listData}
+            />
+          ) : (
             <EvaluationFileModal
               visible={visibleModalFile}
               hide={hideModalFile}
               dataList={listData}
             />
-          ) : null
-        )}
+          )
+        ) : null}
         {data ? (
           <EvaluationModal visible={visible} hide={hide} data={data} />
         ) : null}
@@ -391,9 +395,16 @@ function Header() {
                         Blog
                       </a> */}
                       {isLoggedIn ? (
-                        <button onClick={handleLogout} className="top-direction-button">Logout</button>
+                        <button
+                          onClick={handleLogout}
+                          className="top-direction-button"
+                        >
+                          Logout
+                        </button>
                       ) : (
-                        <Link to="/login" className="top-direction-button">Login</Link>
+                        <Link to="/login" className="top-direction-button">
+                          Login
+                        </Link>
                       )}
                     </div>
                   </div>

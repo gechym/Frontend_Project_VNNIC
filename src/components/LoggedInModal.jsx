@@ -1,38 +1,135 @@
-import React from 'react';
+import React from "react";
+import Rodal from "rodal";
+import "rodal/lib/rodal.css"; // Import the default styles for Rodal
+import "./styles/modal.css";
 
-const LoggedInModal = ({ visible, hide }) => {
-  if (!visible) return null;
+const LoggedInModal = ({ visible, hide, dataList }) => {
+  const [size, setSize] = React.useState("auto");
+  React.useEffect(() => {}, [dataList]);
 
-  const modalStyle = {
-    position: 'fixed',
-    top: '0',
-    left: '0',
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: '1000',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+  const initializeStatus = (dataList) => {
+    return dataList.map((data) => ({
+      ...data,
+      status: data.status || "Bình thường",
+    }));
   };
 
-  const modalContentStyle = {
-    backgroundColor: '#fff',
-    padding: '20px',
-    borderRadius: '8px',
-    maxWidth: '400px',
-    width: '80%',
-    textAlign: 'center'
+  //bien luu du lieu sau khi add status field vao dataList
+  const [localDataList, setLocalDataList] = React.useState(
+    initializeStatus(dataList)
+  );
+  React.useEffect(() => {
+    setLocalDataList(initializeStatus(dataList));
+  }, [dataList]);
+
+  const handleChecked = (index) => (e) => {
+    const newDataList = [...localDataList];
+    newDataList[index].status = e.target.checked
+      ? "Cần xem xét lại"
+      : "Bình thường";
+    setLocalDataList(newDataList);
+  };
+
+  const handleSubmit = async (e) => {
+    console.log(localDataList);
+    alert("Data successfully submitted!");
+    // ham xu li giu lieu submit
+    // e.preventDefault();
+    // try {
+    //   await axios.post("/api/saveEvaluationData", dataList);
+    //   alert("Data successfully submitted!");
+    //   hide();
+    // } catch (error) {
+    //   console.error("Error submitting data:", error);
+    //   alert("Error submitting data. Please try again.");
+    // }
   };
 
   return (
-    <div className="modal" style={modalStyle}>
-      <div className="modal-content" style={modalContentStyle}>
-        <h2>Đánh giá tên miền</h2>
-        <p>Bạn đã đăng nhập. Hãy tiếp tục đánh giá tên miền.</p>
-        <button onClick={hide} style={{ marginTop: '10px' }}>Đóng</button>
-      </div>
-    </div>
+    <Rodal
+      onKeyDown={(e) => {
+        if (e.key === "esc") hide();
+      }}
+      visible={visible}
+      onClose={hide}
+      customStyles={{
+        fontSize: "12px",
+        height: size,
+        maxHeight: "80%",
+        width: "60%",
+        overflow: "scroll",
+      }}
+    >
+      <h2>Kết quả đánh giá</h2>
+      <i>*Kết quả dự đoán từ model ngôn ngữ có tính chất kham khảo</i>
+      <form onSubmit={handleSubmit}>
+        <div style={{ overflow: "scroll", width: "100%", height: "450px" }}>
+          <table className="evaluation-table">
+            <thead>
+              <tr>
+                <th>URL</th>
+                <th>
+                  Entropy <i style={{ fontSize: "9px" }}>{`(*)`}</i>
+                </th>
+                <th>Phần trăm chữ số</th>
+                <th>Độ dài domain</th>
+                <th>Số tự đặt biệt</th>
+                <th>
+                  Kết quả <i style={{ fontSize: "9px" }}>{`(*)`}</i>
+                </th>
+                <th>Cần xem xét lại</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dataList.map((data, index) => (
+                <tr key={index}>
+                  <td style={{ fontSize: "14px" }}>{data.domain}</td>
+                  <td style={{ fontSize: "14px" }}>{data.entropy}</td>
+                  <td style={{ fontSize: "14px" }}>{data.percentageDigits}</td>
+                  <td style={{ fontSize: "14px" }}>{data.domainLength}</td>
+                  <td style={{ fontSize: "14px" }}>{data.specialChars}</td>
+                  <td
+                    style={{
+                      fontSize: "14px",
+                      color:
+                        data.result === "Có tín nhiệm thấp" ? "red" : "black",
+                    }}
+                  >
+                    {data.result}
+                  </td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      //checked={data.status === "Cần xem xét lại"}
+                      onChange={handleChecked(index)}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <i>
+          *Entropy là một thước đo mức độ ngẫu nhiên hoặc phức tạp của chuỗi ký
+          tự.
+        </i>
+        <br />
+        <button
+          type="submit"
+          style={{
+            backgroundColor: "#F37032",
+            outline: "none",
+            height: "40px",
+            width: "100px",
+            fontSize: "14px",
+            borderRadius: "5px",
+            color: "white",
+          }}
+        >
+          Lưu đánh giá
+        </button>
+      </form>
+    </Rodal>
   );
 };
 
