@@ -13,6 +13,7 @@ function Header() {
   const [visibleModalFileLogged, setvisibleModalFileLogged] =
     React.useState(false);
   const [selectedModel, setSelectedModel] = React.useState("Model XML Roberta");
+  const [Logged, setLogged] = React.useState(false);
 
   const [data, setData] = React.useState(null);
   const [listData, setListData] = React.useState([]);
@@ -42,7 +43,7 @@ function Header() {
         console.log("posted file!");
         // Truyền data vô cái modal
         setListData(response.data);
-        showFile();
+        Logged ? showFileLogged() : showFile();
         setError(null);
         setFile(null);
       } catch (error) {
@@ -126,9 +127,9 @@ function Header() {
 
   const hideModalFile = () => {
     setvisibleModalFile(false);
+    setvisibleModalFileLogged(false);
     setData(null);
     setListData([]);
-    setDomain("");
   };
 
   return (
