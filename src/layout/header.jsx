@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import EvaluationModal from '../components/EvaluationModal';
+import LoggedInModal from '../components/LoggedInModal';
 import 'rodal/lib/rodal.css';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Header() {
+  
   const [domain, setDomain] = React.useState('')
   const [visible, setVisible] = React.useState(false)
-  const [selectedModel, setSelectedModel] = React.useState('Model PhoBert');
+  const [selectedModel, setSelectedModel] = React.useState('Model Phobert');
   const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
