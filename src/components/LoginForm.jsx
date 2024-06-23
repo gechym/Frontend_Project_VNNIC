@@ -27,6 +27,7 @@ const LoginForm = () => {
       console.log("Response data:", data); // Log the response data
 
       if (response.ok) {
+        alert("Đăng nhập thành công!");
         console.log("Login successful");
         localStorage.setItem("isLoggedIn", "true");
         navigate("/");

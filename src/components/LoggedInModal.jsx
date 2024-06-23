@@ -1,10 +1,12 @@
 import React from "react";
 import Rodal from "rodal";
+import axios from "axios";
 import "rodal/lib/rodal.css"; // Import the default styles for Rodal
 import "./styles/modal.css";
 
 const LoggedInModal = ({ visible, hide, dataList }) => {
   const [size, setSize] = React.useState("auto");
+
   React.useEffect(() => {}, [dataList]);
 
   const initializeStatus = (dataList) => {
@@ -18,6 +20,7 @@ const LoggedInModal = ({ visible, hide, dataList }) => {
   const [localDataList, setLocalDataList] = React.useState(
     initializeStatus(dataList)
   );
+
   React.useEffect(() => {
     setLocalDataList(initializeStatus(dataList));
   }, [dataList]);
@@ -31,18 +34,17 @@ const LoggedInModal = ({ visible, hide, dataList }) => {
   };
 
   const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.post("/api/saveEvaluationData", { evaluations: localDataList });
+      alert("Data successfully submitted!");
+      hide();
+    } catch (error) {
+      console.error("Error submitting data:", error);
+      alert("Error submitting data. Please try again.");
+    }
     console.log(localDataList);
     alert("Data successfully submitted!");
-    // ham xu li giu lieu submit
-    // e.preventDefault();
-    // try {
-    //   await axios.post("/api/saveEvaluationData", dataList);
-    //   alert("Data successfully submitted!");
-    //   hide();
-    // } catch (error) {
-    //   console.error("Error submitting data:", error);
-    //   alert("Error submitting data. Please try again.");
-    // }
   };
 
   return (
@@ -100,7 +102,7 @@ const LoggedInModal = ({ visible, hide, dataList }) => {
                   <td>
                     <input
                       type="checkbox"
-                      //checked={data.status === "Cần xem xét lại"}
+                      checked={data.status === "Cần xem xét lại"}
                       onChange={handleChecked(index)}
                     />
                   </td>

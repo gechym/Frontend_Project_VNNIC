@@ -30,6 +30,7 @@ function Header() {
   }, []);
 
   const handleLogout = () => {
+    alert("Đăng xuất thành công!");
     localStorage.removeItem("isLoggedIn");
     setIsLoggedIn(false);
     navigate("/");
