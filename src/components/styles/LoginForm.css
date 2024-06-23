@@ -47,6 +47,10 @@
   background-color: #fafafa;
 }
 
+.input-group input:focus {
+  background-color: #fff;
+}
+
 .icon {
   margin-right: 0.5rem;
   color: #888;
@@ -58,7 +62,7 @@
   width: 100%;
   padding-left: 0.5rem;
   background-color: #fafafa;
-  font-size: 1rem;
+  font-size: 14px;
 }
 
 .remember-forgot {
