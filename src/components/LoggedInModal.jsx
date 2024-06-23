@@ -7,6 +7,8 @@ import "./styles/modal.css";
 const LoggedInModal = ({ visible, hide, dataList }) => {
   const [size, setSize] = React.useState("auto");
 
+  const API_BASE_URL = "http://127.0.0.1:8000";
+
   React.useEffect(() => {}, [dataList]);
 
   const initializeStatus = (dataList) => {
@@ -36,7 +38,7 @@ const LoggedInModal = ({ visible, hide, dataList }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/api/saveEvaluationData", { evaluations: localDataList });
+      await axios.post(`${API_BASE_URL}/api/saveEvaluationData`, { evaluations: localDataList });
       alert("Data successfully submitted!");
       hide();
     } catch (error) {
