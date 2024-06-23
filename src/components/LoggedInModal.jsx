@@ -104,7 +104,6 @@ const LoggedInModal = ({ visible, hide, dataList }) => {
                   <td>
                     <input
                       type="checkbox"
-                      checked={data.status === "Cần xem xét lại"}
                       onChange={handleChecked(index)}
                     />
                   </td>
