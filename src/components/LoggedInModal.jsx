@@ -45,8 +45,7 @@ const LoggedInModal = ({ visible, hide, dataList }) => {
       console.error("Error submitting data:", error);
       alert("Error submitting data. Please try again.");
     }
-    console.log(localDataList);
-    alert("Data successfully submitted!");
+    //console.log(localDataList);
   };
 
   return (
