@@ -19,7 +19,7 @@ function Header() {
   const [error, setError] = React.useState(null);
   const [file, setFile] = React.useState(null);
   // const
-  const HOST = "127.0.0.1";
+  const HOST = "10.1.11.250";
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -89,19 +89,34 @@ function Header() {
         },
         body: JSON.stringify({ domain: domain, model_name: selectedModel }),
       });
-      console.log("nam nam");
       if (!response.ok) {
         setError("Domain không hợp lê, vui lòng thử lại");
       }
       const result = await response.json();
-      setData({
-        url: domain,
-        entropy: result.data.entropy,
-        percentageDigits: result.data.percentageDigits,
-        domainLength: result.data.domainLength,
-        specialChars: result.data.specialChars,
-        result: result.data.result,
-      });
+      console.log(result)
+      if (result.data.urlLegit) {
+        setData({
+          url: domain,
+          entropy: result.data.entropy,
+          percentageDigits: result.data.percentageDigits,
+          domainLength: result.data.domainLength,
+          specialChars: result.data.specialChars,
+          urlLegit: result.data.urlLegit,
+          result: result.data.result,
+        });
+      }
+      else {
+        setData({
+          url: domain,
+          entropy: result.data.entropy,
+          percentageDigits: result.data.percentageDigits,
+          domainLength: result.data.domainLength,
+          specialChars: result.data.specialChars,
+          typeDomain: result.data.typeDomain,
+          wordSensitive: result.data.wordSensitive,
+          result: result.data.result,
+        });
+      }
       show();
     } catch (error) {
       setError("Có gì đó không đúng, vui lòng thử lại");

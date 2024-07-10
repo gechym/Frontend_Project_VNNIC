@@ -6,6 +6,7 @@ import Suggestions from "./SuggestionsDomain";
 
 const EvaluationModal = ({ visible, hide, data }) => {
   const [size, setSize] = React.useState("auto");
+  console.log(data)
   React.useEffect(() => {
     if (data.result === "Có tín nhiệm thấp") {
       setSize("auto");
@@ -41,6 +42,8 @@ const EvaluationModal = ({ visible, hide, data }) => {
             <th>Phần trăm chữ số</th>
             <th>Độ dài domain</th>
             <th>Số tự đặt biệt</th>
+            <th>Thể loại</th>
+            <th>Từ khóa</th>
             <th>
               Kết quả <i style={{ fontSize: "9px" }}>{`(*)`}</i>
             </th>
@@ -53,17 +56,37 @@ const EvaluationModal = ({ visible, hide, data }) => {
             <td style={{ fontSize: "14px" }}>{data.percentageDigits}</td>
             <td style={{ fontSize: "14px" }}>{data.domainLength}</td>
             <td style={{ fontSize: "14px" }}>{data.specialChars}</td>
-            <td
-              style={{
-                fontSize: "14px",
-                color: data.result === "Có tín nhiệm thấp" ? "red" : "black",
-              }}
-            >
-              {data.result}
-            </td>
+            <td style={{ fontSize: "14px" }}>{data.typeDomain}</td>
+            <td style={{ fontSize: "14px" }}>{data.wordSensitive}</td>
+            {data.urlLegit ? <>
+              <td
+                style={{
+                  fontSize: "14px",
+                  color: "red",
+                }}
+              >
+               Nghi vấn giả mạo
+              </td>
+            </> :
+              <>
+                <td
+                  style={{
+                    fontSize: "14px",
+                    color: data.result === "Có tín nhiệm thấp" ? "red" : "black",
+                  }}
+                >
+                  {data.result}
+                </td>
+              </>}
           </tr>
         </tbody>
       </table>
+      {data.urlLegit ? <>
+        <i style={{ fontSize: "14px", color: "red" }}>Domain uy tín: <a href={`https://${data.urlLegit}  `} target="_blank" rel="noopener noreferrer">{data.urlLegit}</a> </i>
+      </> :
+        <>
+        </>}
+      <br />
       <i>
         *Entropy là một thước đo mức độ ngẫu nhiên hoặc phức tạp của chuỗi ký
         tự.
