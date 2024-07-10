@@ -31,7 +31,34 @@ const EvaluationModal = ({ visible, hide, data }) => {
         width: "60%",
       }}
     >
-      <h2>Kết quả đánh giá</h2>
+      <span style={{ fontSize: "20px" }}>Kết quả đánh giá: </span>
+      {data.urlLegit ? <>
+        <span
+          style={{
+            fontSize: "18px",
+            color: "red",
+          }}
+        >
+          Nghi vấn giả mạo
+        </span>
+      </> :
+        <>
+          <span
+            style={{
+              fontSize: "18px",
+              color: data.result === "Có tín nhiệm thấp" ? "red" : "black",
+            }}
+          >
+            {data.result}
+          </span>
+        </>}
+      {data.urlLegit ? <>
+        <br />
+        <i style={{ fontSize: "14px", margin: "5px" }}>Domain uy tín: <a href={`https://${data.urlLegit}  `} target="_blank" rel="noopener noreferrer">{data.urlLegit}</a> </i>
+      </> :
+        <>
+        </>}
+      <br />
       <table className="evaluation-table">
         <thead>
           <tr>
@@ -65,7 +92,7 @@ const EvaluationModal = ({ visible, hide, data }) => {
                   color: "red",
                 }}
               >
-               Nghi vấn giả mạo
+                Nghi vấn giả mạo
               </td>
             </> :
               <>
@@ -81,12 +108,7 @@ const EvaluationModal = ({ visible, hide, data }) => {
           </tr>
         </tbody>
       </table>
-      {data.urlLegit ? <>
-        <i style={{ fontSize: "14px", color: "red" }}>Domain uy tín: <a href={`https://${data.urlLegit}  `} target="_blank" rel="noopener noreferrer">{data.urlLegit}</a> </i>
-      </> :
-        <>
-        </>}
-      <br />
+
       <i>
         *Entropy là một thước đo mức độ ngẫu nhiên hoặc phức tạp của chuỗi ký
         tự.

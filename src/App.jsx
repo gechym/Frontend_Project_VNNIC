@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Footer from './layout/footer';
 import Header from './layout/header';
 
-const API_BASE_URL = '113.160.235.186:8000' || process.env.REACT_APP_API_URL;
+const API_BASE_URL = '10.1.11.250:8000' || process.env.REACT_APP_API_URL;
 
 function App() {
   // useEffect(() => {

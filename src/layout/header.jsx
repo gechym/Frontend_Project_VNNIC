@@ -38,36 +38,52 @@ function Header() {
 
   // handle fetch data
   const summitHandler = async () => {
-    if (file) {
-      try {
-        setLoading(true);
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("model_name", selectedModel);
-        const response = await axios.post(
-          `http://${HOST}:8000/api/infer_file`,
-          formData,
-          {
-            headers: {
-              "Content-Type": file.type,
-            },
-          }
-        );
-        console.log("posted file!");
-        // Truyền data vô cái modal
-        setListData(response.data);
-        showFile();
-        setError(null);
-        setFile(null);
-      } catch (error) {
-        console.error("Error uploading file:", error);
-      } finally {
-        setLoading(false);
+    // Check if file and selectedModel are defined
+    if (!file) {
+      console.error("File is not defined or empty.");
+      return;
+    }
+    if (!selectedModel) {
+      console.error("Selected model is not defined or empty.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // Create FormData and append file and model name
+      const formData = new FormData();
+      formData.append("file", file);
+      // formData.append("model_name", selectedModel);
+
+      // Inspect FormData contents
+      console.log("Inspecting FormData contents:");
+      for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
       }
-    } else {
-      infer();
+
+      const response = await axios.post(
+        `http://${HOST}:8000/api/infer_file?model_name=${selectedModel}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("posted file!");
+      setListData(response.data);
+      showFile();
+      setError(null);
+      setFile(null);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    } finally {
+      setLoading(false);
     }
   };
+
   const infer = async () => {
     if (!domain) {
       setError("Vui lòng nhập domain");
