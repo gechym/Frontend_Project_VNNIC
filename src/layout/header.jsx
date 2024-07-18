@@ -19,7 +19,7 @@ function Header() {
   const [error, setError] = React.useState(null);
   const [file, setFile] = React.useState(null);
   // const
-  const HOST = "10.1.11.250";
+  const HOST = "113.160.235.186";
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
@@ -39,49 +39,51 @@ function Header() {
   // handle fetch data
   const summitHandler = async () => {
     // Check if file and selectedModel are defined
-    if (!file) {
-      console.error("File is not defined or empty.");
-      return;
-    }
     if (!selectedModel) {
       console.error("Selected model is not defined or empty.");
       return;
     }
+    if (!file) {
+      console.log(domain)
+      infer()
+    } else {
+      try {
+        setLoading(true);
 
-    try {
-      setLoading(true);
+        // Create FormData and append file and model name
+        const formData = new FormData();
+        formData.append("file", file);
+        // formData.append("model_name", selectedModel);
 
-      // Create FormData and append file and model name
-      const formData = new FormData();
-      formData.append("file", file);
-      // formData.append("model_name", selectedModel);
-
-      // Inspect FormData contents
-      console.log("Inspecting FormData contents:");
-      for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-      }
-
-      const response = await axios.post(
-        `http://${HOST}:8000/api/infer_file?model_name=${selectedModel}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+        // Inspect FormData contents
+        console.log("Inspecting FormData contents:");
+        for (let pair of formData.entries()) {
+          console.log(pair[0] + ': ' + pair[1]);
         }
-      );
 
-      console.log("posted file!");
-      setListData(response.data);
-      showFile();
-      setError(null);
-      setFile(null);
-    } catch (error) {
-      console.error("Error uploading file:", error);
-    } finally {
-      setLoading(false);
+        const response = await axios.post(
+          `http://${HOST}:8000/api/infer_file?model_name=${selectedModel}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("posted file!");
+        setListData(response.data);
+        showFile();
+        setError(null);
+        setFile(null);
+      } catch (error) {
+        console.error("Error uploading file:", error);
+      } finally {
+        setLoading(false);
+      }
     }
+
+
   };
 
   const infer = async () => {
@@ -96,6 +98,7 @@ function Header() {
     }
 
     setLoading(true);
+    
     try {
       const response = await fetch(`http://${HOST}:8000/api/infer`, {
         method: "post",
@@ -105,6 +108,7 @@ function Header() {
         },
         body: JSON.stringify({ domain: domain, model_name: selectedModel }),
       });
+      console.log(response)
       if (!response.ok) {
         setError("Domain không hợp lê, vui lòng thử lại");
       }

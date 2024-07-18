@@ -7,14 +7,14 @@ const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const API_BASE_URL = "http://127.0.0.1:8000" || process.env.REACT_APP_API_URL;
+  const API_BASE_URL = "http://127.0.0.1:3000" || process.env.REACT_APP_API_URL;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log("API_BASE_URL:", API_BASE_URL); // Log API URL
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/login`, {
+      const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
